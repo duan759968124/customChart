@@ -31,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
 //        mDatas.add(85l);
 //        mDatas.add(76l);
 //        mDatas.add(66l);
-        mDatas.add("555");
-        mDatas.add("885");
+        mDatas.add("555.5");
+        mDatas.add("885.8");
         mNames = new ArrayList<>();
 //        mNames.add("9.8");
 //        mNames.add("9.9");

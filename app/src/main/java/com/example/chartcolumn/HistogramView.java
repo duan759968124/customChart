@@ -127,21 +127,21 @@ public class HistogramView extends View {
             canvas.drawText(y_title[i], 60 * mScale + width_start/2, 32 * mScale + min_height * i + mgTop, mTextPaint);
         }
         //平均每一个柱条的间隔
-        int colum_Weight = 60;
+        float colum_Weight = 60;
         float min_weight = (weight +width_start-colum_Weight*mData.size())/mData.size();
         mTextPaint.setTextSize(42 * mScale);
         mTextPaint.setTextAlign(Paint.Align.CENTER);
         for (int i = 0; i < mData.size(); i++) {
 
-            int leftR = (int) (70 * mScale + width_start/2 //x初始位置
+            float leftR = (float) (70 * mScale + width_start/2 //x初始位置
                     + (( weight +width_start/2)- min_weight* (mData.size()-1) - colum_Weight*(mData.size()))/2  //除去柱条加间隔剩余的宽度
                     +(i*(min_weight+colum_Weight))   //每增加一个 间隔宽度跟之前柱条宽度
             );
-            int rightR = leftR + colum_Weight;   // (int) (min_weight / 2)
+            float rightR = leftR + colum_Weight;   // (int) (min_weight / 2)
 
 
-            int buttomR = (int) (colum_Weight/2 * mScale + min_height * 5 + mgTop);
-            int topR = buttomR - (int) (height / MaxY * Long.parseLong(mData.get(i)));
+            float buttomR = (float) (colum_Weight/2 * mScale + min_height * 5 + mgTop);
+            float topR = buttomR - (float) (height / MaxY * Float.parseFloat(mData.get(i)));
 
             canvas.drawRect(new RectF(leftR , topR, rightR, buttomR), mGreenPaint); //绘制柱条
 
