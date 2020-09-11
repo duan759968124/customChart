@@ -25,18 +25,19 @@ public class HistogramView extends View {
     private float width_start;
     private float weight;
     private float height;
-    private float mScale;
-    private float mgTop;
+    private float mScale;//
+    private float mgTop; //
     //这个数组是高度的值
     private String[] y_title =new String[6];
     //分别定义数据源跟数据源名称集合
-    private List<Long> mData;
+    private List<String> mData;
     private List<String> mNames;
 
 
     private int mLineColor ;
     private int mGeenColor;
     private int mTextColor;
+    private int mTextDataColor;
     private int MaxY;
 
     public void setmLineColor(int mLineColor)
@@ -55,6 +56,11 @@ public class HistogramView extends View {
     {
         this.mTextColor = mTextColor;
         mTextPaint.setColor(mTextColor);
+    }
+
+    public void setmTextDataColor(int mTextDataColor)
+    {
+        this.mTextDataColor = mTextDataColor;
     }
 
     public void setMaxY(int maxY)
@@ -114,11 +120,11 @@ public class HistogramView extends View {
                 mLinePaint.setColor(mLineColor);
             }
             //绘制y轴对应横线
-            canvas.drawLine(70 * mScale + width_start/2, 30 * mScale + min_height * i, 70 * mScale + weight +width_start, 30 * mScale + min_height * i, mLinePaint);
+            canvas.drawLine(70 * mScale + width_start/2, 30 * mScale + min_height * i + mgTop, 70 * mScale + weight +width_start, 30 * mScale + min_height * i + mgTop, mLinePaint);
             mTextPaint.setTextAlign(Paint.Align.RIGHT);
             mTextPaint.setTextSize(40 * mScale);
             //绘制y轴数值
-            canvas.drawText(y_title[i], 60 * mScale + width_start/2, 32 * mScale + min_height * i, mTextPaint);
+            canvas.drawText(y_title[i], 60 * mScale + width_start/2, 32 * mScale + min_height * i + mgTop, mTextPaint);
         }
         //平均每一个柱条的间隔
         int colum_Weight = 60;
@@ -134,21 +140,22 @@ public class HistogramView extends View {
             int rightR = leftR + colum_Weight;   // (int) (min_weight / 2)
 
 
-            int buttomR = (int) (colum_Weight/2 * mScale + min_height * 5 );
-            int topR = buttomR - (int) (height / MaxY * mData.get(i));
+            int buttomR = (int) (colum_Weight/2 * mScale + min_height * 5 + mgTop);
+            int topR = buttomR - (int) (height / MaxY * Long.parseLong(mData.get(i)));
 
             canvas.drawRect(new RectF(leftR , topR, rightR, buttomR), mGreenPaint); //绘制柱条
 
-            mTextPaint.setColor(getResources().getColor(R.color.color979797));
             //x轴对应柱条的名称
+            mTextPaint.setColor(mTextColor);
             canvas.drawText(mNames.get(i), leftR + colum_Weight/2 , buttomR + 40 * mScale, mTextPaint);
+            mTextPaint.setColor(mTextDataColor);
            //柱条上的数值
             canvas.drawText(mData.get(i) + "", leftR + colum_Weight/2 , topR - 40 * mScale, mTextPaint);
         }
     }
 
     //传入数据并进行绘制
-    public void updateThisData(List<Long> data, List<String> name)
+    public void updateThisData(List<String> data, List<String> name)
     {
         mData = data;
         mNames = name;

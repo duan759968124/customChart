@@ -11,7 +11,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private HistogramView customView;
-    private List<Long> mDatas;
+    private List<String> mDatas;
     private List<String> mNames;
     private int MaxY;
 
@@ -26,12 +26,13 @@ public class MainActivity extends AppCompatActivity {
         customView.setmLineColor(getResources().getColor(R.color.colorLine));
         customView.setmGeenColor(getResources().getColor(R.color.colorAccent));
         customView.setmTextColor(getResources().getColor(R.color.colorText));
+        customView.setmTextDataColor(getResources().getColor(R.color.color979797));
         mDatas = new ArrayList<>();
 //        mDatas.add(85l);
 //        mDatas.add(76l);
 //        mDatas.add(66l);
-        mDatas.add(555L);
-        mDatas.add(885L);
+        mDatas.add("555");
+        mDatas.add("885");
         mNames = new ArrayList<>();
 //        mNames.add("9.8");
 //        mNames.add("9.9");
