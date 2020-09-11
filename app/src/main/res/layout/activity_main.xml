@@ -27,6 +27,12 @@
             android:layout_marginTop="15dp"/>
 
 
+<!--        <com.example.chartcolumn.HistogramView_polyline-->
+<!--            android:id="@+id/customView_polyline"-->
+<!--            android:layout_width="345dp"-->
+<!--            android:layout_height="290dp"-->
+<!--            android:layout_below="@+id/title"-->
+<!--            android:layout_marginTop="10dp" />-->
         <com.example.chartcolumn.HistogramView
             android:id="@+id/customView"
             android:layout_width="345dp"
