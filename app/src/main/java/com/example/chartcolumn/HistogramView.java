@@ -33,12 +33,16 @@ public class HistogramView extends View {
     private List<String> mData;
     private List<String> mNames;
 
-
+    //定义颜色
     private int mLineColor ;
     private int mGeenColor;
     private int mTextColor;
     private int mTextDataColor;
     private int MaxY;
+    //数值与柱条的距离
+    private int dis_data=50;
+    //柱条名称距离x轴的距离
+    private int dis_nameX=20;
 
     public void setmLineColor(int mLineColor)
     {
@@ -148,10 +152,10 @@ public class HistogramView extends View {
 
             //x轴对应柱条的名称
             mTextPaint.setColor(mTextColor);
-            canvas.drawText(mNames.get(i), leftR + colum_Weight/2 , buttomR + 40 * mScale, mTextPaint);
+            canvas.drawText(mNames.get(i), leftR + colum_Weight/2 , buttomR + dis_data * mScale, mTextPaint);
             mTextPaint.setColor(mTextDataColor);
            //柱条上的数值
-            canvas.drawText(mData.get(i) + "", leftR + colum_Weight/2 , topR - 40 * mScale, mTextPaint);
+            canvas.drawText(mData.get(i) + "", leftR + colum_Weight/2 , topR - dis_nameX * mScale, mTextPaint);
         }
     }
 
