@@ -124,11 +124,12 @@ public class HistogramView extends View {
             mTextPaint.setTextAlign(Paint.Align.RIGHT);
             mTextPaint.setTextSize(40 * mScale);
             //绘制y轴数值
-            canvas.drawText(y_title[i], 60 * mScale + width_start/2, 32 * mScale + min_height * i + mgTop, mTextPaint);
+            canvas.drawText(y_title[i], 55 * mScale + width_start/2, 32 * mScale + min_height * i + mgTop, mTextPaint);
         }
-        //平均每一个柱条的间隔
+        //每个柱条的宽度
         float colum_Weight = 60;
-        float min_weight = (weight +width_start-colum_Weight*mData.size())/mData.size();
+        //平均每一个柱条的间隔
+        float min_weight = (weight +width_start/2-colum_Weight*mData.size())/mData.size();
         mTextPaint.setTextSize(42 * mScale);
         mTextPaint.setTextAlign(Paint.Align.CENTER);
         for (int i = 0; i < mData.size(); i++) {

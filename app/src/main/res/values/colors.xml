@@ -7,7 +7,8 @@
 
     <color name="colorbg">#0D83A1</color>
 
-    <color name="colorLine">#C9CED3</color>
+<!--    <color name="colorLine">#C9CED3</color>-->
+    <color name="colorLine">#EF1303</color>
     <color name="colorText">#333333</color>
     <color name="color979797">#979797</color>
 </resources>
