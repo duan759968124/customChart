@@ -128,7 +128,7 @@ public class HistogramView extends View {
             mTextPaint.setTextAlign(Paint.Align.RIGHT);
             mTextPaint.setTextSize(40 * mScale);
             //绘制y轴数值
-            canvas.drawText(y_title[i], 55 * mScale + width_start/2, 32 * mScale + min_height * i + mgTop, mTextPaint);
+            canvas.drawText(y_title[i], 55 * mScale + width_start/2, 30 * mScale + min_height * i + mgTop+10, mTextPaint);
         }
         //每个柱条的宽度
         float colum_Weight = 60;
