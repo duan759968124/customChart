@@ -3,6 +3,7 @@ package com.example.chartcolumn;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
@@ -16,10 +17,14 @@ public class HistogramView extends View {
     private int Colum = 1;
     private int Line = 2;
 
+    private Path mPathLine;
+
     //定义画笔
     private Paint mLinePaint;
     private Paint mGreenPaint;
     private Paint mTextPaint;
+    private Paint mStopPaint;
+    private Paint mBrokenLine;
 
     //定义上下文
     private Context mContext;
@@ -64,6 +69,8 @@ public class HistogramView extends View {
     {
         this.mGeenColor = mGeenColor;
         mGreenPaint.setColor(mGeenColor);
+        mStopPaint.setColor(mGeenColor);
+        mBrokenLine.setColor(mGeenColor);
     }
 
     public void setmTextColor(int mTextColor)
@@ -96,15 +103,27 @@ public class HistogramView extends View {
         super(context, attrs);
         //给定义的画笔进行加工
         mContext = context;
+
+        mPathLine = new Path();
+
         mLinePaint = new Paint();
         mGreenPaint = new Paint();
         mTextPaint = new Paint();
+        mStopPaint = new Paint();
+        mBrokenLine = new Paint();
 
         mGreenPaint.setStyle(Paint.Style.FILL);
+        mStopPaint.setStyle(Paint.Style.FILL);
+        mBrokenLine.setStyle(Paint.Style.STROKE);
 
         mTextPaint.setAntiAlias(true);
         mGreenPaint.setAntiAlias(true);
         mLinePaint.setAntiAlias(true);
+        mStopPaint.setAntiAlias(true);
+        mBrokenLine.setAntiAlias(true);
+
+        mStopPaint.setStrokeWidth(2);
+        mBrokenLine.setStrokeWidth(2);
 
     }
 
@@ -192,8 +211,17 @@ public class HistogramView extends View {
 
                     endX = leftR;
                     endY = topR;
-                    if (i != 0)
-                        canvas.drawLine(startX, startY, endX, endY, mGreenPaint); //绘制折线
+                    if (i==0){
+                        mPathLine.moveTo(endX,endY);
+                    }else{
+                        mPathLine.lineTo(endX,endY);
+//                        canvas.drawLine(startX, startY, endX, endY, mGreenPaint); //绘制折线
+                        canvas.drawCircle(startX,startY,10,mStopPaint);
+                        if (i==mData.size()-1){
+                            canvas.drawCircle(endX,endY,10,mStopPaint);
+                        }
+                    }
+                    canvas.drawPath(mPathLine,mBrokenLine);
 
                     startX = endX;
                     startY = endY;
