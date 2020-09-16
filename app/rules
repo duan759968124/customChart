@@ -1,0 +1,22 @@
+近日，工信部启动新一轮的App合规检测工作，12月将前完成覆盖40万款主流App的合规检测工作。
+为了保证您的App顺利通过检测，结合当前监管关注重点，
+
+
+Android   统计SDK初始化合规方案。
+
+
+请牢记！合规三步走：
+1、您需要确保App有《隐私政策》，并且在用户首次启动App时就弹出《隐私政策》取得用户同意。
+
+2、您务必告知用户您选择友盟+SDK服务，请在《隐私政策》中增加如下参考条款：
+“我们的产品集成友盟+SDK，友盟+SDK需要收集您的设备Mac地址、
+ 唯一设备识别码（IMEI/android ID/IDFA/OPENUDID/GUID、SIM 卡 IMSI 信息）以提供统计分析服务，并通过地理位置校准报表数据准确性，提供基础反作弊能力。”
+
+
+3、您务必确保用户同意《隐私政策》之后，再初始化友盟+SDK。
+
+各类SDK合规的初始化技术配置方案如下：
+1. 统计SDK：https://developer.umeng.com/docs/119267/detail/182050
+2. 推送SDK：https://developer.umeng.com/docs/67966/detail/179087
+3. 分享SDK：https://developer.umeng.com/docs/128606/detail/182094
+4. 智能认证SDK：https://developer.umeng.com/docs/143070/detail/182078

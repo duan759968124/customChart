@@ -1,2 +1,3 @@
+include ':honrizontalBar-master'
 include ':app'
 rootProject.name = "chartColumn"
