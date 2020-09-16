@@ -231,7 +231,8 @@ public class HistogramView extends View {
             mTextPaint.setTextSize(40 * mScale);
             mTextPaint.setColor(mTextColor);
             //绘制y轴数值
-            canvas.drawText(y_title[i], 55 * mScale + width_start / 2, 30 * mScale + min_height * i + mgTop + 10, mTextPaint);
+            if (y_title[i] != null)
+                canvas.drawText(y_title[i], 55 * mScale + width_start / 2, 30 * mScale + min_height * i + mgTop + 10, mTextPaint);
         }
 
         //绘制柱状图或折线图
@@ -321,7 +322,8 @@ public class HistogramView extends View {
                 }
                 break;
         }
-
+        if (mData == null || mData.size() == 0)
+            return;
         //绘制弹框提示
         if (x != 0.0 && y != 0.0) {
             if (x < ScreenWidth / 3) { //left
@@ -345,19 +347,19 @@ public class HistogramView extends View {
             }
 
             if (isMove) {
-                if (mData.size() <= 7){
-                    canvas.drawLine(x, 30 * mScale + min_height * 5 + mgTop, x , (30 * mScale + min_height * 5 + mgTop - min_height * 5), mGreenPaint);
+                if (mData.size() <= 7) {
+                    canvas.drawLine(x, 30 * mScale + min_height * 5 + mgTop, x, (30 * mScale + min_height * 5 + mgTop - min_height * 5), mGreenPaint);
                     canvas.drawBitmap(bitmap, leftTopX, leftTopY, paintText);
-                } else{
+                } else {
                     canvas.drawLine(x + startOriganalX, 30 * mScale + min_height * 5 + mgTop, x + startOriganalX, (30 * mScale + min_height * 5 + mgTop - min_height * 5), mGreenPaint);
                     canvas.drawBitmap(bitmap, leftTopX + startOriganalX, leftTopY, paintText);
                 }
             } else {
-                if (mData.size() <= 7){
+                if (mData.size() <= 7) {
                     canvas.drawLine(x, 30 * mScale + min_height * 5 + mgTop, x, (30 * mScale + min_height * 5 + mgTop - min_height * 5), mGreenPaint);
                     canvas.drawBitmap(bitmap, leftTopX, leftTopY, paintText);
-                }else{
-                    canvas.drawLine(x , 30 * mScale + min_height * 5 + mgTop, x , (30 * mScale + min_height * 5 + mgTop - min_height * 5), mGreenPaint);
+                } else {
+                    canvas.drawLine(x, 30 * mScale + min_height * 5 + mgTop, x, (30 * mScale + min_height * 5 + mgTop - min_height * 5), mGreenPaint);
                     canvas.drawBitmap(bitmap, leftTopX, leftTopY, paintText);
                 }
 
