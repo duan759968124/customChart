@@ -93,6 +93,7 @@ public class HistogramView extends View {
     private float textY;
     //提示框
     private Bitmap bitmap;
+    private boolean isShow = false;
     //提示文字
     private String Strdate = "";
     private String Strvalue = "";
@@ -324,60 +325,60 @@ public class HistogramView extends View {
         }
         if (mData == null || mData.size() == 0)
             return;
-        //绘制弹框提示
-        if (x != 0.0 && y != 0.0) {
-            if (x < ScreenWidth / 3) { //left
-                bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.sjxq_hekuang_bg1);
-                leftTopX = x - triangle_size;
-                leftTopY = y - BitmapHeight - triangle_size;
-                textX = x + BitmapWidth / 2;
-                textY = y - BitmapHeight + BitmapHeight / 3;
-            } else if (ScreenWidth / 3 < x && x < ScreenWidth / 3 * 2.5) { //center
-                bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.sjxq_hekuang_bg2);
-                leftTopX = x - BitmapWidth / 2;
-                leftTopY = y - BitmapHeight - triangle_size;
-                textX = x;
-                textY = y - BitmapHeight + BitmapHeight / 3;
-            } else { //right
-                bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.sjxq_hekuang_bg3);
-                leftTopX = x + triangle_size - BitmapWidth;
-                leftTopY = y - BitmapHeight - triangle_size;
-                textX = x - BitmapWidth / 2 + triangle_size;
-                textY = y - BitmapHeight + BitmapHeight / 3;
-            }
-
-            if (isMove) {
-                if (mData.size() <= 7) {
-                    canvas.drawLine(x, 30 * mScale + min_height * 5 + mgTop, x, (30 * mScale + min_height * 5 + mgTop - min_height * 5), mGreenPaint);
-                    canvas.drawBitmap(bitmap, leftTopX, leftTopY, paintText);
-                } else {
-                    canvas.drawLine(x + startOriganalX, 30 * mScale + min_height * 5 + mgTop, x + startOriganalX, (30 * mScale + min_height * 5 + mgTop - min_height * 5), mGreenPaint);
-                    canvas.drawBitmap(bitmap, leftTopX + startOriganalX, leftTopY, paintText);
-                }
-            } else {
-                if (mData.size() <= 7) {
-                    canvas.drawLine(x, 30 * mScale + min_height * 5 + mgTop, x, (30 * mScale + min_height * 5 + mgTop - min_height * 5), mGreenPaint);
-                    canvas.drawBitmap(bitmap, leftTopX, leftTopY, paintText);
-                } else {
-                    canvas.drawLine(x, 30 * mScale + min_height * 5 + mgTop, x, (30 * mScale + min_height * 5 + mgTop - min_height * 5), mGreenPaint);
-                    canvas.drawBitmap(bitmap, leftTopX, leftTopY, paintText);
+        //绘制弹框提示  (增加判断：当柱状图滑动时不清除提示框)
+        if (isShow) {
+            if (x != 0.0 && y != 0.0) {
+                if (x < ScreenWidth / 3) { //left
+                    bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.sjxq_hekuang_bg1);
+                    leftTopX = x - triangle_size;
+                    leftTopY = y - BitmapHeight - triangle_size;
+                    textX = x + BitmapWidth / 2;
+                    textY = y - BitmapHeight + BitmapHeight / 3;
+                } else if (ScreenWidth / 3 < x && x < ScreenWidth / 3 * 2.5) { //center
+                    bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.sjxq_hekuang_bg2);
+                    leftTopX = x - BitmapWidth / 2;
+                    leftTopY = y - BitmapHeight - triangle_size;
+                    textX = x;
+                    textY = y - BitmapHeight + BitmapHeight / 3;
+                } else { //right
+                    bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.sjxq_hekuang_bg3);
+                    leftTopX = x + triangle_size - BitmapWidth;
+                    leftTopY = y - BitmapHeight - triangle_size;
+                    textX = x - BitmapWidth / 2 + triangle_size;
+                    textY = y - BitmapHeight + BitmapHeight / 3;
                 }
 
-            }
-            if (isMove) {
-                paintText.setTypeface(Typeface.DEFAULT);
-                canvas.drawText(Strdate, textX + startOriganalX, textY, paintText);
-                paintText.setTypeface(Typeface.DEFAULT_BOLD);
-                canvas.drawText(Strvalue, textX + startOriganalX, textY + (BitmapHeight / 2), paintText);
-            } else {
-                paintText.setTypeface(Typeface.DEFAULT);
-                canvas.drawText(Strdate, textX, textY, paintText);
-                paintText.setTypeface(Typeface.DEFAULT_BOLD);
-                canvas.drawText(Strvalue, textX, textY + (36), paintText);
+                if (isMove) {
+                    if (mData.size() <= 7) {
+                        canvas.drawLine(x, 30 * mScale + min_height * 5 + mgTop, x, (30 * mScale + min_height * 5 + mgTop - min_height * 5), mGreenPaint);
+                        canvas.drawBitmap(bitmap, leftTopX, leftTopY, paintText);
+                    } else {
+                        canvas.drawLine(x + startOriganalX, 30 * mScale + min_height * 5 + mgTop, x + startOriganalX, (30 * mScale + min_height * 5 + mgTop - min_height * 5), mGreenPaint);
+                        canvas.drawBitmap(bitmap, leftTopX + startOriganalX, leftTopY, paintText);
+                    }
+                } else {
+                    if (mData.size() <= 7) {
+                        canvas.drawLine(x, 30 * mScale + min_height * 5 + mgTop, x, (30 * mScale + min_height * 5 + mgTop - min_height * 5), mGreenPaint);
+                        canvas.drawBitmap(bitmap, leftTopX, leftTopY, paintText);
+                    } else {
+                        canvas.drawLine(x, 30 * mScale + min_height * 5 + mgTop, x, (30 * mScale + min_height * 5 + mgTop - min_height * 5), mGreenPaint);
+                        canvas.drawBitmap(bitmap, leftTopX, leftTopY, paintText);
+                    }
+
+                }
+                if (isMove) {
+                    paintText.setTypeface(Typeface.DEFAULT);
+                    canvas.drawText(Strdate, textX + startOriganalX, textY, paintText);
+                    paintText.setTypeface(Typeface.DEFAULT_BOLD);
+                    canvas.drawText(Strvalue, textX + startOriganalX, textY + (BitmapHeight / 2), paintText);
+                } else {
+                    paintText.setTypeface(Typeface.DEFAULT);
+                    canvas.drawText(Strdate, textX, textY, paintText);
+                    paintText.setTypeface(Typeface.DEFAULT_BOLD);
+                    canvas.drawText(Strvalue, textX, textY + (36), paintText);
+                }
             }
         }
-
-
     }
 
     /*********************************************************************** 更新数据 *****************************************************/
@@ -432,7 +433,7 @@ public class HistogramView extends View {
                 dispatchTouchY = getY();
                 break;
             case MotionEvent.ACTION_MOVE:
-
+                isShow = false;
                 float deltaX = dispatchCurrX - dispatchTouchX;
                 float deltaY = dispatchCurrY - dispatchTouchY;
                 if (Math.abs(deltaY) - Math.abs(deltaX) > 0) {//数值滑动的父容器拦截事件
@@ -508,7 +509,7 @@ public class HistogramView extends View {
                 if (Math.abs(speed) > 100 && !isFling && measureWidth < mData.size() * (barWidth + barInterval) && isMove) { //是滑动
                     this.post(horizontalScrollRunnable = new HorizontalScrollRunnable(speed));
                 } else { //是点击(弹框)
-
+                    isShow = true;
                     switch (Type) {
                         case 1:
                             //判断点击点的位置
