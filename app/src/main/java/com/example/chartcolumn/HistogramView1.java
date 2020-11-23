@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
-import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -21,7 +20,7 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistogramView extends View {
+public class HistogramView1 extends View {
 
     private int ScreenWidth = 0;
 
@@ -44,6 +43,7 @@ public class HistogramView extends View {
     //分别定义数据源跟数据源名称集合
     private List<Object> mData;
     private List<String> mNames;
+    private List<String> mNums;
 
     //定义颜色
     private int mLineColor;
@@ -58,7 +58,7 @@ public class HistogramView extends View {
 
 
     //每个柱条的宽度
-    float colum_Weight = 60;
+    float colum_Weight = 40;
     //每一个柱条的间隔
     float min_weight;
     //y轴刻度间隔
@@ -93,7 +93,7 @@ public class HistogramView extends View {
     private float textY;
     //提示框
     private Bitmap bitmap;
-    private boolean isShow = false;
+    private boolean isShow = true;
     //提示文字
     private String Strdate = "";
     private String Strvalue = "";
@@ -151,13 +151,13 @@ public class HistogramView extends View {
 
     /*********************************************************************** 构造函数 *****************************************************/
 
-    public HistogramView(Context context)
+    public HistogramView1(Context context)
     {
         super(context);
     }
 
     //实例化
-    public HistogramView(Context context, @Nullable AttributeSet attrs)
+    public HistogramView1(Context context, @Nullable AttributeSet attrs)
     {
         super(context, attrs);
         //给定义的画笔进行加工
@@ -207,7 +207,7 @@ public class HistogramView extends View {
         ScreenWidth = w;
         weight = 0.7F * w;
         width_start = 0.3F * w / 2;
-        height = 0.70F * h;
+        height = 0.50F * h;
     }
 
     /*********************************************************************** 绘制 *****************************************************/
@@ -216,26 +216,27 @@ public class HistogramView extends View {
     {
         super.onDraw(canvas);
         mScale = 1;
-        mgTop = 50;
+        mgTop = 30;
         min_height = height / 5;
         //绘制横纵坐标及标尺线
-        for (int i = 5; i >= 0; i--) {
-            //调整画笔的颜色
+        if (mData!=null && mData.size()>0){
+            for (int i = 5; i >= 0; i--) {
+                //调整画笔的颜色
 //            if (i == 5) {
 //                mLinePaint.setColor(mLineColor);
 //            } else {
-            mLinePaint.setColor(mLineColor);
+                mLinePaint.setColor(mLineColor);
 //            }
-            //绘制y轴对应横线
-            canvas.drawLine(70 * mScale + width_start / 2, 30 * mScale + min_height * i + mgTop, 70 * mScale + weight + width_start, 30 * mScale + min_height * i + mgTop, mLinePaint);
-            mTextPaint.setTextAlign(Paint.Align.RIGHT);
-            mTextPaint.setTextSize(40 * mScale);
-            mTextPaint.setColor(mTextColor);
-            //绘制y轴数值
-            if (y_title[i] != null)
-                canvas.drawText(y_title[i], 55 * mScale + width_start / 2, 30 * mScale + min_height * i + mgTop + 10, mTextPaint);
+                //绘制y轴对应横线
+                canvas.drawLine(70 * mScale + width_start / 2, colum_Weight / 2 * mScale + min_height * i + mgTop, 70 * mScale + weight + width_start, colum_Weight / 2 * mScale + min_height * i + mgTop, mLinePaint);
+                mTextPaint.setTextAlign(Paint.Align.RIGHT);
+                mTextPaint.setTextSize(40 * mScale);
+                mTextPaint.setColor(mTextColor);
+                //绘制y轴数值
+//            if (y_title[i] != null)
+//                canvas.drawText(y_title[i], 55 * mScale + width_start / 2, 30 * mScale + min_height * i + mgTop + 10, mTextPaint);
+            }
         }
-
         //绘制柱状图或折线图
         switch (Type) {
             case 1:
@@ -244,10 +245,11 @@ public class HistogramView extends View {
                 if (!isScroll)
                     min_weight = (weight + width_start / 2 - colum_Weight * mData.size()) / mData.size();  //当数据少时自行应间隔
                 else
-                    min_weight = 50;
+                    min_weight = 20;
                 mTextPaint.setTextSize(42 * mScale);
                 mTextPaint.setTextAlign(Paint.Align.CENTER);
-
+                if (mData == null)
+                    return;
                 for (int i = 0; i < mData.size(); i++) {
                     float leftR;
                     if (mData.size() > 7) { //从左到右绘制
@@ -263,20 +265,35 @@ public class HistogramView extends View {
                         );
                     }
 
-                    float rightR = leftR + colum_Weight;   // (int) (min_weight / 2)
+                    float rightR = leftR + colum_Weight;   // (int) (min_weight / 2)0
 
 
                     float buttomR = (float) (colum_Weight / 2 * mScale + min_height * 5 + mgTop);
                     float topR = buttomR - (float) (height / MaxY * Float.parseFloat(mData.get(i).toString()));
 
                     canvas.drawRect(new RectF(leftR, topR, rightR, buttomR), mGreenPaint); //绘制柱条
-
                     //x轴对应柱条的名称
                     mTextPaint.setColor(mTextColor);
-                    canvas.drawText(mNames.get(i), leftR + colum_Weight / 2, buttomR + dis_data * mScale, mTextPaint);
+                    mTextPaint.setTextSize(30);
+                    /////test
+                    Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();
+                    mTextPaint.clearShadowLayer();
+                    for (int j = 0; j < mNames.get(i).length(); j++) {
+                        canvas.drawText(String.valueOf(mNames.get(i).charAt(j)), leftR + colum_Weight / 2, buttomR + dis_data * mScale
+                                + j * (Math.abs(fontMetrics.top)), mTextPaint);
+                        if (j == mNames.get(i).length() - 1) {
+                            mTextPaint.setTextSize(24);
+                            canvas.drawText(mNums.get(i), leftR + colum_Weight / 2, buttomR + dis_data * mScale
+                                    + (j + 1) * (Math.abs(fontMetrics.top)), mTextPaint);
+                        }
+                    }
+
+                    ////test
+//                    canvas.drawText(mNames.get(i), leftR + colum_Weight / 2, buttomR + dis_data * mScale, mTextPaint);
+                    mTextPaint.setTextSize(30);
                     mTextPaint.setColor(mTextDataColor);
                     //柱条上的数值
-//                    canvas.drawText(mData.get(i) + "", leftR + colum_Weight / 2, topR - dis_nameX * mScale, mTextPaint);
+                    canvas.drawText(mData.get(i) + "", leftR + colum_Weight / 2, topR - dis_nameX * mScale, mTextPaint);
                 }
                 break;
             case 2:
@@ -286,7 +303,8 @@ public class HistogramView extends View {
 
                 startX = (70 * mScale + width_start / 2);//x初始位置
                 startY = (min_height * 5 + mgTop);
-
+                if (mData == null)
+                    return;
                 for (int i = 0; i < mData.size(); i++) {
 
                     float leftR = (70 * mScale + width_start / 2 //x初始位置
@@ -325,68 +343,72 @@ public class HistogramView extends View {
         }
         if (mData == null || mData.size() == 0)
             return;
-        //绘制弹框提示  (增加判断：当柱状图滑动时不清除提示框)
+        //绘制弹框提示  (增加判断：当柱状图滑动时清除提示框)
         if (isShow) {
             if (x != 0.0 && y != 0.0) {
-                if (x < ScreenWidth / 3) { //left
-                    bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.sjxq_hekuang_bg1);
-                    leftTopX = x - triangle_size;
-                    leftTopY = y - BitmapHeight - triangle_size;
-                    textX = x + BitmapWidth / 2;
-                    textY = y - BitmapHeight + BitmapHeight / 3;
-                } else if (ScreenWidth / 3 < x && x < ScreenWidth / 3 * 2.5) { //center
-                    bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.sjxq_hekuang_bg2);
-                    leftTopX = x - BitmapWidth / 2;
-                    leftTopY = y - BitmapHeight - triangle_size;
-                    textX = x;
-                    textY = y - BitmapHeight + BitmapHeight / 3;
-                } else { //right
-                    bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.sjxq_hekuang_bg3);
-                    leftTopX = x + triangle_size - BitmapWidth;
-                    leftTopY = y - BitmapHeight - triangle_size;
-                    textX = x - BitmapWidth / 2 + triangle_size;
-                    textY = y - BitmapHeight + BitmapHeight / 3;
-                }
-
+//                if (x < ScreenWidth / 3) { //left
+//                    bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.sjxq_hekuang_bg1);
+//                    leftTopX = x - triangle_size;
+//                    leftTopY = y - BitmapHeight - triangle_size;
+//                    textX = x + BitmapWidth / 2;
+//                    textY = y - BitmapHeight + BitmapHeight / 3;
+//                } else if (ScreenWidth / 3 < x && x < ScreenWidth / 3 * 2.5) { //center
+//                    bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.sjxq_hekuang_bg2);
+//                    leftTopX = x - BitmapWidth / 2;
+//                    leftTopY = y - BitmapHeight - triangle_size;
+//                    textX = x;
+//                    textY = y - BitmapHeight + BitmapHeight / 3;
+//                } else { //right
+//                    bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.sjxq_hekuang_bg3);
+//                    leftTopX = x + triangle_size - BitmapWidth;
+//                    leftTopY = y - BitmapHeight - triangle_size;
+//                    textX = x - BitmapWidth / 2 + triangle_size;
+//                    textY = y - BitmapHeight + BitmapHeight / 3;
+//                }
                 if (isMove) {
                     if (mData.size() <= 7) {
-                        canvas.drawLine(x, 30 * mScale + min_height * 5 + mgTop, x, (30 * mScale + min_height * 5 + mgTop - min_height * 5), mGreenPaint);
-                        canvas.drawBitmap(bitmap, leftTopX, leftTopY, paintText);
+                        canvas.drawLine(x, colum_Weight / 2 * mScale + min_height * 5 + mgTop, x, (colum_Weight / 2 * mScale + min_height * 5 + mgTop - min_height * 5), mGreenPaint);
+//                        canvas.drawBitmap(bitmap, leftTopX, leftTopY, paintText);
                     } else {
-                        canvas.drawLine(x + startOriganalX, 30 * mScale + min_height * 5 + mgTop, x + startOriganalX, (30 * mScale + min_height * 5 + mgTop - min_height * 5), mGreenPaint);
-                        canvas.drawBitmap(bitmap, leftTopX + startOriganalX, leftTopY, paintText);
+                        canvas.drawLine(x + startOriganalX, colum_Weight / 2 * mScale + min_height * 5 + mgTop, x + startOriganalX, (colum_Weight / 2 * mScale + min_height * 5 + mgTop - min_height * 5), mGreenPaint);
+//                        canvas.drawBitmap(bitmap, leftTopX + startOriganalX, leftTopY, paintText);
                     }
                 } else {
                     if (mData.size() <= 7) {
-                        canvas.drawLine(x, 30 * mScale + min_height * 5 + mgTop, x, (30 * mScale + min_height * 5 + mgTop - min_height * 5), mGreenPaint);
-                        canvas.drawBitmap(bitmap, leftTopX, leftTopY, paintText);
+                        canvas.drawLine(x, colum_Weight / 2 * mScale + min_height * 5 + mgTop, x, (colum_Weight / 2 * mScale + min_height * 5 + mgTop - min_height * 5), mGreenPaint);
+//                        canvas.drawBitmap(bitmap, leftTopX, leftTopY, paintText);
                     } else {
-                        canvas.drawLine(x, 30 * mScale + min_height * 5 + mgTop, x, (30 * mScale + min_height * 5 + mgTop - min_height * 5), mGreenPaint);
-                        canvas.drawBitmap(bitmap, leftTopX, leftTopY, paintText);
+                        canvas.drawLine(x, colum_Weight / 2 * mScale + min_height * 5 + mgTop, x, (colum_Weight / 2 * mScale + min_height * 5 + mgTop - min_height * 5), mGreenPaint);
+//                        canvas.drawBitmap(bitmap, leftTopX, leftTopY, paintText);
                     }
 
                 }
-                if (isMove) {
-                    paintText.setTypeface(Typeface.DEFAULT);
-                    canvas.drawText(Strdate, textX + startOriganalX, textY, paintText);
-                    paintText.setTypeface(Typeface.DEFAULT_BOLD);
-                    canvas.drawText(Strvalue, textX + startOriganalX, textY + (BitmapHeight / 2), paintText);
-                } else {
-                    paintText.setTypeface(Typeface.DEFAULT);
-                    canvas.drawText(Strdate, textX, textY, paintText);
-                    paintText.setTypeface(Typeface.DEFAULT_BOLD);
-                    canvas.drawText(Strvalue, textX, textY + (36), paintText);
-                }
+//                if (isMove) {
+//                    Log.e("TAG", "onDraw: isMove true " + isMove );
+//                    paintText.setTypeface(Typeface.DEFAULT);
+//                    canvas.drawText(Strdate, textX + startOriganalX, textY, paintText);
+//                    paintText.setTypeface(Typeface.DEFAULT_BOLD);
+//                    canvas.drawText(Strvalue, textX + startOriganalX, textY + (BitmapHeight / 2), paintText);
+//                } else {
+//                    Log.e("TAG", "onDraw: isMove false" + isMove );
+//                    paintText.setTypeface(Typeface.DEFAULT);
+//                    canvas.drawText(Strdate, textX, textY, paintText);
+//                    paintText.setTypeface(Typeface.DEFAULT_BOLD);
+//                    canvas.drawText(Strvalue, textX, textY + (36), paintText);
+//                }
+                x=0.0f;
+                y=0.0f;
             }
         }
     }
 
     /*********************************************************************** 更新数据 *****************************************************/
     //传入数据并进行绘制
-    public void updateThisData(List<Object> data, List<String> name)
+    public void updateThisData(List<Object> data, List<String> name, List<String> num)
     {
         mData = data;
         mNames = name;
+        mNums = num;
         invalidate();
     }
 
@@ -421,7 +443,6 @@ public class HistogramView extends View {
     @Override
     public boolean dispatchTouchEvent(MotionEvent event)
     {
-        Log.e("TAG", "MyBarChartView===dispatchTouchEvent==" + event.getAction());
         int dispatchCurrX = (int) event.getX();
         int dispatchCurrY = (int) event.getY();
         switch (event.getAction()) {
@@ -480,13 +501,11 @@ public class HistogramView extends View {
 
                 //这是向右滑动
                 if ((currX - lastX) > 0) {
-                    Log.e("TAG", "向右滑动");
                     if (startOriganalX > 0) {
                         startOriganalX = 0;
                         isBoundary = true;
                     }
                 } else {
-                    Log.e("TAG", "向左滑动");
                     if (-startOriganalX > getMoveLength()) {
                         startOriganalX = -getMoveLength();
                         isBoundary = true;
@@ -501,7 +520,7 @@ public class HistogramView extends View {
                 }
 
                 tempLength = currX - lastX;
-                Log.e("TAG", "onTouchEvent:tempLength--- " + tempLength);
+//                Log.e("TAG", "onTouchEvent:tempLength--- " + tempLength);
                 //如果数据量少，根本没有充满横屏，就没必要重新绘制
                 if (measureWidth < mData.size() * (barWidth + barInterval)) {
                     invalidate();
@@ -516,7 +535,7 @@ public class HistogramView extends View {
                 if (Math.abs(speed) > 100 && !isFling && measureWidth < mData.size() * (barWidth + barInterval) && isMove) { //是滑动
                     this.post(horizontalScrollRunnable = new HorizontalScrollRunnable(speed));
                 } else { //是点击(弹框)
-                    isShow = true;
+                    Log.e("TAG", "onTouchEvent: isShow  " + isShow);
                     switch (Type) {
                         case 1:
                             //判断点击点的位置
@@ -549,6 +568,8 @@ public class HistogramView extends View {
                                                 invalidate();
                                             }
                                         }
+                                    }else{
+                                        Log.e("TAG", "onTouchEvent: 点击在了 柱条中间  "  );
                                     }
                                 } else { //从中间计算点击的位置属于哪一个柱条
                                     leftx = (float) (70 * mScale + width_start / 2 //x初始位置
@@ -590,7 +611,7 @@ public class HistogramView extends View {
                                             + ((weight + width_start / 2) - min_weight * (mData.size() - 1)) / 2  //除去间隔剩余的宽度
                                             + (i * (min_weight))   //每增加一个 间隔宽度跟之前柱条宽度
                                     );
-                                    float buttomR = (min_height * 5 + mgTop) + 30 * mScale;
+                                    float buttomR = (min_height * 5 + mgTop) + colum_Weight / 2 * mScale;
                                     float topR = buttomR - (height / MaxY * Float.parseFloat(mData.get(i).toString()));
                                     if (lastX < leftbrokenx - min_weight / 2)
                                         continue;
@@ -665,7 +686,7 @@ public class HistogramView extends View {
         @Override
         public void run()
         {
-            if (Math.abs(speed) < 30) {
+            if (Math.abs(speed) < colum_Weight / 2) {
                 isFling = false;
                 return;
             }
