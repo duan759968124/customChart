@@ -11,4 +11,7 @@
     <color name="colorLine">#EF1303</color>
     <color name="colorText">#333333</color>
     <color name="color979797">#979797</color>
+
+    <color name="c_4cc1fd">#4cc1fd</color>
+    <color name="c_F2F2F2">#F2F2F2</color>
 </resources>
